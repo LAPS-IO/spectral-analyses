@@ -1,6 +1,6 @@
 # Package names
 packages <- c("data.table", "tidyverse", "here", 
-              "plotly", "astsa", "dplR", 
+              "plotly", "astsa", "dplR", "lubridate",
               "ggpubr", "patchwork", "vegan")
 
 # Install packages not yet installed

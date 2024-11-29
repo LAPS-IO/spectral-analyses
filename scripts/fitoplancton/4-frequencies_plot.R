@@ -1,7 +1,7 @@
 # Packages
 # Loading packages used run the analysis
 library(here)
-source(here("3-periodicities_plot.R"))
+source(here("scripts", "fitoplancton", "3-periodicities_plot.R"))
 gc()
 
 # Hourly filtered densities of normalized data, filtered by low and high month densities

@@ -5,7 +5,7 @@
 # Packages
 # Loading packages used run the analysis
 library(here)
-source(here("0-library.R"))
+source(here("scripts", "fitoplancton", "0-library.R"))
 
 # path of files of interest
 path <- here("data", "raw", "fitoplancton")
@@ -69,8 +69,8 @@ pb <- txtProgressBar(min = 0, max = length(df), style = 3)
 for(d in names(df)) {
   df2[[d]] <- df[[d]] |>
     group_by(class, 
-             cycle_rounded = round_date(cycle_rounded, "1 hour")) %>%
-    summarize(n = n() %>% as.integer()) |>
+             cycle_rounded = lubridate::round_date(cycle_rounded, "1 hour")) %>%
+    dplyr::summarise(n = dplyr::n() %>% as.integer()) |>
     ungroup()
   
   setTxtProgressBar(pb, d)
@@ -134,9 +134,9 @@ pb <- txtProgressBar(min = 0, max = 100, style = 3)
 for(i in names(df5)) {
   df6[[i]] <- df5[[i]] |>
     dplyr::mutate(density = as.numeric(unlist(df5[[i]][i])) / as.numeric(unlist(volume_L))) |>
-    dplyr::filter(between(cycle_rounded,
-                          ymd_hms("2020-11-04 00:00:00"),
-                          ymd_hms("2021-12-31 23:59:59"))) |>
+    dplyr::filter(dplyr::between(cycle_rounded,
+                                 lubridate::ymd_hms("2020-11-04 00:00:00"),
+                                 lubridate::ymd_hms("2021-12-31 23:59:59"))) |>
     droplevels()
 
   setTxtProgressBar(pb, i)

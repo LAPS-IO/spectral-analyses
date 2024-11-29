@@ -1,8 +1,8 @@
 #################################
 # Packages
 # Loading packages used run the analysis
-source(here("0-library.R"))
-source(here("2-time-series_plot.R"))
+source(here("scripts", "fitoplancton", "0-library.R"))
+source(here("scripts", "fitoplancton", "2-time-series_plot.R"))
 rm(list = ls())
 gc()
 
@@ -70,8 +70,8 @@ for(f in names(files_list)) {
   
   # Turn 0, periods < 26h == drop high frequencies
   data_fft_temp <- data_fft_temp %>%
-    mutate(LF = if_else(HF == 0, spectrum, 0),
-           LF_complex = if_else(HF == 0, spectrum_complex, 0))
+    mutate(LF = dplyr::if_else(HF == 0, spectrum, 0),
+           LF_complex = dplyr::if_else(HF == 0, spectrum_complex, 0))
   
   data_fft[[f]] <- data_fft_temp
   
@@ -100,10 +100,10 @@ for(f in names(files_list)) {
                                        density = df$density,
                                        HF = HF_series,
                                        LF = LF_series) %>%
-    reframe(across(c(density, HF, LF), 
-                   list(m = mean, dp = sd),
-                   .names = "{.col}_{.fn}"),
-            .by = mes)
+    dplyr::reframe(dplyr::across(c(density, HF, LF), 
+                                 list(m = mean, dp = sd),
+                                 .names = "{.col}_{.fn}"),
+                   .by = mes)
   
   # Hourly Data for Time plot filtered
   hourly_data_filtered[[f]] <- tibble(cycle = df$cycle_rounded,
@@ -112,10 +112,10 @@ for(f in names(files_list)) {
                                       density = df$density,
                                       HF = HF_series,
                                       LF = LF_series) %>%
-    reframe(across(c(density, HF, LF), 
-                   list(m = mean, dp = sd),
-                   .names = "{.col}_{.fn}"),
-            .by = c(mes, hora))
+    dplyr::reframe(dplyr::across(c(density, HF, LF),
+                                 list(m = mean, dp = sd),
+                                 .names = "{.col}_{.fn}"),
+                   .by = c(mes, hora))
   
   cat(paste(f, "\n"))
 }
@@ -274,19 +274,19 @@ for(d in seq_along(names(hourly_data_filtered))) {
     dplyr::filter(factor(hourly_data_filtered[[d]]$mes) %in% 
                     factor(low_dens_month[[d]])) %>% 
     droplevels() %>% 
-    reframe(across(c(density_m, HF_m, LF_m), 
-                   list(mean),
-                   .names = "{.col}"),
-            .by = hora)
+    dplyr::reframe(dplyr::across(c(density_m, HF_m, LF_m),
+                          list(mean),
+                          .names = "{.col}"),
+                   .by = hora)
   
   data_high <- hourly_data_filtered[[d]] %>%  
     dplyr::filter(factor(hourly_data_filtered[[d]]$mes) %in% 
                     factor(high_dens_month[[d]])) %>% 
     droplevels() %>% 
-    reframe(across(c(density_m, HF_m, LF_m), 
-                   list(mean),
-                   .names = "{.col}"),
-            .by = hora)
+    dplyr::reframe(dplyr::across(c(density_m, HF_m, LF_m),
+                                 list(mean),
+                                 .names = "{.col}"),
+                   .by = hora)
   
   p_low <- ggplot(data_low, aes(x = hora)) +
     geom_point(aes(y = density_m, color = "Density")) +
