@@ -60,15 +60,15 @@ for(f in names(files_list)) {
                           spectrum_complex = spectrum_complex)
   
   # Filter by frequency 
-  # Turn 0, periods > 26h == drop low frequencies
-  N_freq_cut <- length(data_fft_temp$period) - sum(data_fft_temp$period < 26, na.rm = T)
-  data_fft_temp$HF <- ifelse(data_fft_temp$period > 26, 0, data_fft_temp$spectrum)
+  # Turn 0, periods > 40h == drop low frequencies
+  N_freq_cut <- length(data_fft_temp$period) - sum(data_fft_temp$period < 40, na.rm = T)
+  data_fft_temp$HF <- ifelse(data_fft_temp$period > 40, 0, data_fft_temp$spectrum)
   data_fft_temp$HF[(N - N_freq_cut + 1):N] <- 0 # Turn as 0 symmetric frequencies
-  data_fft_temp$HF_complex <- ifelse(data_fft_temp$period > 26, 0,
+  data_fft_temp$HF_complex <- ifelse(data_fft_temp$period > 40, 0,
                                      data_fft_temp$spectrum_complex)
   data_fft_temp$HF_complex[(N - N_freq_cut + 1):N] <- 0 # Turn as 0 symmetric frequencies
   
-  # Turn 0, periods < 26h == drop high frequencies
+  # Turn 0, periods < 40h == drop high frequencies
   data_fft_temp <- data_fft_temp %>%
     mutate(LF = dplyr::if_else(HF == 0, spectrum, 0),
            LF_complex = dplyr::if_else(HF == 0, spectrum_complex, 0))
@@ -143,7 +143,7 @@ spectral_plot <- function(df_list = data_fft, titles = classes) {
     fig <- ggplot(data) +
       geom_line(aes(x = frequency, 
                     y = spectrum, 
-                    color = ifelse(period < 26, 
+                    color = ifelse(period < 40, 
                                    "High Frequency", 
                                    "Low Frequency"))) +
       xlim(0, .5) +
