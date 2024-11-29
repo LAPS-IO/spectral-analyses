@@ -35,6 +35,7 @@ hourly_data_filtered <- NULL
 data_fft <- NULL
 HF_series_list <- NULL
 LF_series_list <- NULL
+data_filtered <- NULL
 
 for(f in names(files_list)) {
   
@@ -94,13 +95,20 @@ for(f in names(files_list)) {
   mean(LF_series, na.rm = T)
   LF_series_list[[f]] <- LF_series
   
+  # Uncategorized Data for Time plot filtered
+  data_filtered[[f]] <- tibble(cycle = df$cycle_rounded,
+                               mes = month(df$cycle_rounded),
+                               density = df$density,
+                               HF = HF_series,
+                               LF = LF_series)
+  
   # Monthly Data for Time plot filtered
   monthly_data_filtered[[f]] <- tibble(cycle = df$cycle_rounded,
                                        mes = month(df$cycle_rounded),
                                        density = df$density,
                                        HF = HF_series,
                                        LF = LF_series) %>%
-    dplyr::reframe(dplyr::across(c(density, HF, LF), 
+    dplyr::reframe(dplyr::across(c(density, HF, LF),
                                  list(m = mean, dp = sd),
                                  .names = "{.col}_{.fn}"),
                    .by = mes)
@@ -376,3 +384,55 @@ for(d in seq_along(names(hourly_data_filtered))) {
   
 }
 
+# Plot rebuilded series by High and Low frequencies
+output_dir_figs <- here("images", "fitoplancton", "5-Series_rebuilded_plots")
+
+for(p in seq_along(names(data_filtered))) {
+  
+  data <- data_filtered[[p]]
+  
+  fig <- ggplot(data, aes(x = cycle)) +
+    geom_line(aes(y = HF-mean(HF, na.rm = T), color = "High Frequency"), linewidth = .4) +
+    geom_line(aes(y = LF-mean(LF, na.rm = T), color = "Low Frequency"), linewidth = .8) +
+    labs(title = classes[p],
+         x = "Date", y = "Density (ind./L)") +
+    scale_color_manual(name = "Filters", 
+                       values = c("High Frequency" = "red", 
+                                  "Low Frequency" = "blue")) +
+    scale_x_datetime(breaks = "1 month", date_labels = "%Y-%m") +
+    theme_light() +
+    theme(axis.text.x = element_text(size = 20, face = "bold", 
+                                     family = "Times New Roman",
+                                     angle = 90, hjust = 1,
+                                     vjust = .5, color = "black"),
+          axis.text.y = element_text(size = 16, face = "bold",
+                                     family = "Times New Roman",
+                                     color = "black"),
+          legend.text = element_text(size = 20, face = "bold",
+                                     family = "Times New Roman",
+                                     color = "black"),
+          axis.title.x = element_text(size = 22, face = "bold",
+                                      family = "Times New Roman",
+                                      color = "black"),
+          axis.title.y = element_text(size = 20, face = "bold",
+                                      family = "Times New Roman",
+                                      color = "black"),
+          legend.title = element_text(size = 22, face = "bold",
+                                      family = "Times New Roman",
+                                      color = "black"),
+          title = element_text(size = 20, face = "bold", 
+                               family = "Times New Roman", 
+                               color = "black"))
+  
+  ggsave(filename = here(output_dir_figs,
+                         paste0("series_rebuilded_", 
+                                names(data_filtered)[p],
+                                ".png")),
+         plot = fig,
+         width = 15, height = 7,
+         dpi = "retina")
+  
+  print(fig)
+  cat(paste(names(data_filtered)[p], "\n"))
+  
+}
