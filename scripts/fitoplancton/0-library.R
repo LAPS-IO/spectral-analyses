@@ -1,7 +1,7 @@
 # Package names
 packages <- c("data.table", "tidyverse", "here", 
               "plotly", "astsa", "dplR", "lubridate",
-              "ggpubr", "patchwork", "vegan")
+              "ggpubr", "patchwork", "vegan", "hms")
 
 # Install packages not yet installed
 installed_packages <- packages %in% rownames(installed.packages())
