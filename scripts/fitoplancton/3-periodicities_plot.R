@@ -1,7 +1,7 @@
 #################################
 # Packages
 # Loading packages used run the analysis
-source(here("scripts", "fitoplancton", "0-library.R"))
+source(here("scripts", "general", "0-library.R"))
 source(here("scripts", "fitoplancton", "2-time-series_plot.R"))
 rm(list = ls())
 gc()

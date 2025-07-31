@@ -5,7 +5,7 @@
 # Packages
 # Loading packages used run the analysis
 library(here)
-source(here("scripts", "fitoplancton", "0-library.R"))
+source(here("scripts", "general", "0-library.R"))
 
 # path of files of interest
 path <- here("data", "raw", "fitoplancton")
