@@ -2,9 +2,5 @@
 .Rhistory
 .RData
 .Ruserdata
-/data/raw/zooplancton
-/data/raw/fitoplancton
-/data/raw/fitoplancton.rar
-/data/raw/environ
-/data/processed/zooplancton
-/data/processed/environ
+/data/raw
+/data/processed
