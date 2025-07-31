@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 # Script only for environ
-
-=======
->>>>>>> fc9c083e9a513e94ce0c624be017bc851b2432d9
 # Packages
 # Loading packages used run the analysis
 library(here)

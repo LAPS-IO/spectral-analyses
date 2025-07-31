@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Script test
 # Packages
 # Loading packages used run the analysis
@@ -131,28 +130,11 @@ for(d in seq_along(names(hourly_data_filtered))) {
 }
 
 #######
-
-
-
-
-=======
-# Packages
-# Loading packages used run the analysis
-library(here)
-source(here("scripts", "fitoplancton", "3-periodicities_plot.R"))
-gc()
-
-# Hourly filtered densities of normalized data, filtered by low and high month densities
->>>>>>> fc9c083e9a513e94ce0c624be017bc851b2432d9
 df_high <- NULL
 for(i in names(hourly_data_filtered)) {
   
   df <- hourly_data_filtered[[i]]
-<<<<<<< HEAD
   month_selected <- high_dens_month[[i]][, "data_m"]
-=======
-  month_selected <- high_dens_month[[i]]
->>>>>>> fc9c083e9a513e94ce0c624be017bc851b2432d9
   
   df_high[[i]] <- df %>% 
     dplyr::filter(mes %in% month_selected) %>% 
@@ -161,18 +143,12 @@ for(i in names(hourly_data_filtered)) {
     dplyr::mutate(HF_norm = decostand(HF_m,
                                       method = "range") %>%
                     as.numeric)
-    
-    
 }
 
 df_low <- NULL
 for(i in names(hourly_data_filtered)) {
   
-<<<<<<< HEAD
   df <- hourly_data_filtered[[i]][, 1:3]
-=======
-  df <- hourly_data_filtered[[i]]
->>>>>>> fc9c083e9a513e94ce0c624be017bc851b2432d9
   month_selected <- low_dens_month[[i]]
   
   df_low[[i]] <- df %>% 

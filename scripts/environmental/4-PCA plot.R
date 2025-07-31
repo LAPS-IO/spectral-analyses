@@ -246,7 +246,6 @@ run_pca <- function(lista_dados, sufixo_nome, dir_saida,
 
 run_pca(bandas_extraidas, "original", dir_figs_pca, label_vec)
 run_pca(resultado_corrigido$dados, "transformed", dir_figs_pca, label_vec)
-<<<<<<< HEAD
 
 ###############################################################################
 ###############################################################################
@@ -563,6 +562,3 @@ run_pca_groups(
   rotulos_var   = rotulos_var,
   variaveis_usar = vars    # faz seleção interativa; ou passe um vetor fixo de nomes
 )
-
-=======
->>>>>>> fc9c083e9a513e94ce0c624be017bc851b2432d9

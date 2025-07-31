@@ -17,10 +17,9 @@ window_type <- "none"
 # Reading and adjusting data
 library(here)
 path <- here("data", "processed", "zooplancton")
-<<<<<<< HEAD
+
 # path <- here("data", "processed", "environ", "3 - data rebuilded")
-=======
->>>>>>> fc9c083e9a513e94ce0c624be017bc851b2432d9
+
 files <- list.files(path, pattern = ".csv", full.names = TRUE)[3]
 datetime_col <- function(dt) {
   nome1 <- names(dt)[1]
@@ -29,12 +28,10 @@ datetime_col <- function(dt) {
 }
 files_list <- lapply(files, function(x) datetime_col(data.table::fread(x)))
 names(files_list) <- sapply(files_list, function(dt) dt[1, 2])
-<<<<<<< HEAD
+
 # names(files_list) <- "tot"
 # files_list$tot <- rename(files_list$tot, "cycle_rounded" = cycle)
-=======
 
->>>>>>> fc9c083e9a513e94ce0c624be017bc851b2432d9
 #####
 densidade_por_hora <- list()
 
@@ -47,11 +44,8 @@ for (nome in names(files_list)) {
   df_agrupado <- df[, .(
     total_rois = sum(N_rois, na.rm = TRUE),
     total_volume = sum(vol_sampled_L, na.rm = TRUE)
-<<<<<<< HEAD
   ), by = .(cycle_rounded = lubridate::round_date(cycle_rounded, "1 hour")) ]
-=======
-  ), by = cycle_rounded]
->>>>>>> fc9c083e9a513e94ce0c624be017bc851b2432d9
+
   
   # Calcula densidade
   df_agrupado[, density := total_rois / total_volume]
@@ -62,10 +56,7 @@ for (nome in names(files_list)) {
   # Armazena o resultado na lista com o mesmo nome
   densidade_por_hora[[nome]] <- df_resultado
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> fc9c083e9a513e94ce0c624be017bc851b2432d9
 #####
 # Lists
 data_fft <- list()
@@ -75,11 +66,7 @@ hourly_data_filtered <- list()
 
 # Band filter function
 filter_band <- function(complex_vector, period, min_p = -Inf, max_p = Inf) {
-<<<<<<< HEAD
-  mask <- period > min_p & period <= max_p
-=======
   mask <- period >= min_p & period < max_p
->>>>>>> fc9c083e9a513e94ce0c624be017bc851b2432d9
   complex_vector[!mask] <- 0 + 0i
   return(complex_vector)
 }
@@ -153,10 +140,7 @@ for (f in names(densidade_por_hora)) {
   data_filtered[[f]] <- df_bands
   
   monthly_data_filtered[[f]] <- df_bands %>%
-<<<<<<< HEAD
-    # mutate(ano = year(cycle)) %>%
-=======
->>>>>>> fc9c083e9a513e94ce0c624be017bc851b2432d9
+
     group_by(mes) %>%
     summarise(across(.cols = c(data, BF1, BF2, BF3, BF4),
                      .fns = list(m = ~mean(.x, na.rm = TRUE),
@@ -181,17 +165,11 @@ walk2(data_fft, names(data_fft), ~fwrite(.x, file.path(path_fft, paste0(.y, ".cs
 
 path_filt <- here("data", "processed", "zooplancton", "3 - data rebuilded")
 dir.create(path_filt, recursive = TRUE, showWarnings = FALSE)
-<<<<<<< HEAD
 walk2(data_filtered, names(data_filtered), 
       ~fwrite(.x, file.path(path_filt, paste0(.y, ".csv"))))
 
 # PLOTS
 # Rebuilded plot V1
-=======
-walk2(data_filtered, names(data_filtered), ~fwrite(.x, file.path(path_filt, paste0(.y, ".csv"))))
-
-# PLOTS
->>>>>>> fc9c083e9a513e94ce0c624be017bc851b2432d9
 rebuilded_plot <- function(df_list = data_filtered, 
                            titles = names(df_list), 
                            output_dir = here("images", "zooplancton", "3 - rebuilded_series_by_BF")) {
@@ -227,7 +205,6 @@ rebuilded_plot <- function(df_list = data_filtered,
       facet_wrap(~ factor(bands_series,
                           levels = c("data", "BF1", "BF2", "BF3", "BF4"),
                           labels = c("Original time-series",
-<<<<<<< HEAD
                                      "frequency <= 53 hours",
                                      "53 hours < frequency <= 13 days",
                                      "13 days < frequency <= 15 days",
@@ -235,15 +212,6 @@ rebuilded_plot <- function(df_list = data_filtered,
                  scales = "free_y", nrow = 5) +
       scale_x_datetime(breaks = "1 month", date_labels = "%Y-%m") +
       labs(x = "Date", y = "Density (ind./L)", title = titles[p]) +
-=======
-                                     "BF1: frequency <= 53h",
-                                     "BF2: 53h < frequency <= 13 dias",
-                                     "BF3: 13 dias < frequency <= 15 dias",
-                                     "BF4: frequency > 15 dias")),
-                 scales = "free_y", nrow = 5) +
-      scale_x_datetime(breaks = "1 month", date_labels = "%Y-%m") +
-      labs(x = "Date", y = "Value", title = titles[p]) +
->>>>>>> fc9c083e9a513e94ce0c624be017bc851b2432d9
       theme_light() +
       theme(axis.text.x = element_text(size = 13, face = "bold", 
                                        angle = 90, color = "black", 
@@ -267,7 +235,7 @@ rebuilded_plot <- function(df_list = data_filtered,
     
   }
 }
-<<<<<<< HEAD
+
 rebuilded_plot()
 
 # Spectral plot V1
@@ -276,12 +244,6 @@ spectral_plot <- function(df_list = data_fft,
                           output_dir = here("images", 
                                             "zooplancton", 
                                             "2 - freq_filters")) {
-=======
-
-spectral_plot <- function(df_list = data_fft, 
-                          titles = names(df_list), 
-                          output_dir = here("images", "zooplancton", "2 - freq_filters")) {
->>>>>>> fc9c083e9a513e94ce0c624be017bc851b2432d9
   
   dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
   
@@ -299,34 +261,21 @@ spectral_plot <- function(df_list = data_fft,
       pivot_longer(cols = starts_with("BF"), 
                    names_to = "bands_series", 
                    values_to = "bands_values") %>%
-<<<<<<< HEAD
       filter((bands_series == "BF1_power" & period_hours <= 53) |
                (bands_series == "BF2_power" & period_hours > 53 & period_hours <= 13*24) |
                (bands_series == "BF3_power" & period_hours > 13*24 & period_hours <= 15*24) |
                (bands_series == "BF4_power" & period_hours > 15*24))
-=======
-      filter((bands_series == "BF1_power" & period_hours < 53) |
-               (bands_series == "BF2_power" & period_hours >= 53 & period_hours < 13*24) |
-               (bands_series == "BF3_power" & period_hours >= 13*24 & period_hours < 15*24) |
-               (bands_series == "BF4_power" & period_hours >= 15*24))
->>>>>>> fc9c083e9a513e94ce0c624be017bc851b2432d9
     
     fig <- ggplot(data_long) +
       geom_line(aes(x = period_hours, y = bands_values), color = "darkblue") +
       scale_x_continuous(n.breaks = 15) +
       facet_wrap(~ factor(bands_series,
                           levels = c("BF1_power", "BF2_power", "BF3_power", "BF4_power"),
-<<<<<<< HEAD
                           labels = c("frequency <= 53 hours",
                                      "53 hours < frequency <= 13 days",
                                      "13 days < frequency <= 15 days",
                                      "15 days < frequency")),
-=======
-                          labels = c("BF1: frequency <= 53h",
-                                     "BF2: 53h < frequency <= 13 dias",
-                                     "BF3: 13 dias < frequency <= 15 dias",
-                                     "BF4: frequency > 15 dias")),
->>>>>>> fc9c083e9a513e94ce0c624be017bc851b2432d9
+
                  scales = "free", nrow = 5) +
       labs(x = "Hour", y = "Spectrum", title = titles[p]) +
       theme_light() +
@@ -349,19 +298,15 @@ spectral_plot <- function(df_list = data_fft,
                                       family = "Times New Roman", 
                                       color = "black"))
     
-<<<<<<< HEAD
     ggsave(filename = here(output_dir, paste0("spectrum_byband_",
                                               names(df_list)[p], ".png")),
-=======
-    ggsave(filename = here(output_dir, paste0("spectrum_byband_", 
-                                              names(df_list)[p], ".png")), 
->>>>>>> fc9c083e9a513e94ce0c624be017bc851b2432d9
+
            plot = fig, width = 15, height = 7, dpi = "retina")
     print(fig)
     
   }
 }
-<<<<<<< HEAD
+
 spectral_plot()
 
 # Spectral plot V2
@@ -481,11 +426,3 @@ spectral_plot(df_list = data_fft,
                 BF2 = list(type = "daniell", m = 5),
                 BF3 = list(type = "daniell", m = 2),
                 BF4 = list(type = "daniell", m = 5)))
-
-
-=======
-
-# EXECUTA PLOTS
-rebuilded_plot()
-spectral_plot()
->>>>>>> fc9c083e9a513e94ce0c624be017bc851b2432d9

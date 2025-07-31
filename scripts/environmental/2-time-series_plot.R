@@ -31,7 +31,6 @@ plot_specs <- tibble(nome = c("airtemp.C_inmet", "CDOM.ppb_simcosta", "chl.ugL_s
                               "solrad.Kjm2_inmet", "subtidalelevation.m_marinha", 
                               "tidalelevation.m_marinha", "totsealev.m_marinha", 
                               "turb.ntu_simcosta", "wattemp.C_laps", "wattemp.C_simcosta"),
-<<<<<<< HEAD
                      ylab = c("Air temperature °C - INMET", "CDOM ppb/QSDE - SiMCosta", 
                               "Clorofila µg/L - SiMCosta", "DO ml/L - SiMCosta", 
                               "East-West cur vel m/s - SiMCosta", 
@@ -39,17 +38,7 @@ plot_specs <- tibble(nome = c("airtemp.C_inmet", "CDOM.ppb_simcosta", "chl.ugL_s
                               "North-South cur vel m/s - SiMCosta", 
                               "North-South wind vel m/s - SiMCosta", "Rainfall mm\u00B3 - INMET", 
                               "River Discharge mm\u00B3/s - Votorantim", "Salinidade - LAPS", 
-                              "Salinidade - SiMCosta", "Solar Radiation Kj/m² - INMET", 
-=======
-                     ylab = c("Air temperature °C - INMET", "CDOM ppp/QSDE - SiMCosta", 
-                              "Clorofila ug/L - SiMCosta", "DO ml/L - SiMCosta", 
-                              "East-West cur vel m/s - SiMCosta", 
-                              "East-West wind vel m/s - SiMCosta",
-                              "North-South cur vel m/s - SiMCosta", 
-                              "North-South wind vel m/s - SiMCosta", "Rainfall mm3 - INMET", 
-                              "River Discharge m3/s - Votorantim", "Salinidade - LAPS", 
-                              "Salinidade - SiMCosta", "Solar Radiation Kj/M2 - INMET", 
->>>>>>> fc9c083e9a513e94ce0c624be017bc851b2432d9
+                              "Salinidade - SiMCosta", "Solar Radiation Kj/m² - INMET",
                               "Subtidal Elevation m - Marinha", "Tidal Elevation m - Marinha", 
                               "Total Sea Elevation m - Marinha", "Turbidity NTU - SiMCosta",
                               "Water Temperature °C - LAPS", "Water Temperature °C - SiMCosta"),
@@ -121,7 +110,6 @@ for (i in seq_len(nrow(plot_specs))) {
   print(fig)
   
 } 
-<<<<<<< HEAD
 
 #############################################
 #############################################
@@ -165,14 +153,13 @@ ann <- list(list(x = 0.92, y = 0.5,
                  text = "E-W wind (m s⁻¹)",
                  showarrow = FALSE, textangle = -90,
                  xanchor = "left", yanchor = "middle",
-                 font = list(color = "red", size = 25))#,
+                 font = list(color = "red", size = 25)))#,
             # list(x = 0.99, y = 0.5,
             #      xref = "paper", yref = "paper",
             #      text = "N-S wind (m s⁻¹)",
             #      showarrow = FALSE, textangle = -90,
             #      xanchor = "left", yanchor = "middle",
-            #      font = list(color = "blue", size = 25))
-)
+            #      font = list(color = "blue", size = 25)))
 
 #––– Começa o plot com ciclo no eixo x –––
 fig <- plot_ly(data = df, x = ~cycle)
@@ -256,7 +243,3 @@ fig <- fig %>%
                       tickformat="%b<br>%Y"))
 
 fig
-
-
-=======
->>>>>>> fc9c083e9a513e94ce0c624be017bc851b2432d9
